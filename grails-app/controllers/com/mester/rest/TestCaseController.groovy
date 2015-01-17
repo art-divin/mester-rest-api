@@ -14,12 +14,15 @@ import com.mester.rest.TestCase;
 @Transactional(readOnly = false)
 class TestCaseController extends RestfulController {
   static responseFormat = ['json']
+
   TestCaseController() {
     super(TestCase)
   }
+
   def index() {
 
   }
+
   def show(TestCase testCase) {
     def responseData = [
       'result': testCase,
@@ -27,6 +30,7 @@ class TestCaseController extends RestfulController {
     ]
     render responseData as JSON
   }
+
   def save() {
     def objectMap = request.JSON
     def responseData = [:]
