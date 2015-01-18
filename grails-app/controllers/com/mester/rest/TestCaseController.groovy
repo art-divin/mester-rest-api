@@ -26,7 +26,7 @@ class TestCaseController extends RestfulController {
   def show(TestCase testCase) {
     def responseData = [
       'result': testCase,
-      'status': testCase ? "OK" : "Nothing present"
+      'status': testCase ? "ok" : "error"
     ]
     render responseData as JSON
   }
@@ -41,13 +41,16 @@ class TestCaseController extends RestfulController {
       if (testCase.validate()) {
         testCase.save()
         response.sendError(HttpServletResponse.SC_CREATED)
+        responseData["status"] = "ok"
       } else {
         responseData['errors'] = testCase.errors
         println testCase.errors
         response.status = HttpServletResponse.SC_BAD_REQUEST
+        responseData["status"] = "error"
       }
     } else {
       response.status = HttpServletResponse.SC_BAD_REQUEST
+      responseData["status"] = "error"
     }
     render responseData as JSON
   }

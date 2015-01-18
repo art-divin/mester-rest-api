@@ -26,15 +26,15 @@ class ProjectController extends RestfulController {
   def show(Project project) {
     def responseData = [
       'result' : project,
-      'status' : project ? "OK" : "Nothing present"
+      'status' : project ? "ok" : "error"
     ]
     render responseData as JSON
   }
 
   def listTestCases(Project project) {
     def responseData = [
-      'results' : project.tests,
-      'status' : project ? "OK" : "Nothing present"
+      'result' : project.tests,
+      'status' : project ? "ok" : "error"
     ]
     render responseData as JSON
   }
@@ -42,8 +42,8 @@ class ProjectController extends RestfulController {
   def listProjects() {
     def projectList = Project.getAll()
     def responseData = [
-      'results' : projectList,
-      'status' : projectList ? "OK" : "Nothing present"
+      'result' : projectList,
+      'status' : projectList ? "ok" : "error"
     ]
     render responseData as JSON
   }
@@ -55,10 +55,12 @@ class ProjectController extends RestfulController {
     if (project.validate()) {
       project.save()
       response.status = HttpServletResponse.SC_CREATED
+      responseData["status"] = "ok"
     } else {
       responseData['errors'] = project.errors
       println project.errors
       response.status = HttpServletResponse.SC_BAD_REQUEST
+      responseData["status"] = "error"
     }
     render responseData as JSON
   }
