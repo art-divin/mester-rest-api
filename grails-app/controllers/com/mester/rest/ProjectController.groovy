@@ -31,9 +31,24 @@ class ProjectController extends RestfulController {
     render responseData as JSON
   }
 
+  def delete(Project project) {
+    def responseData = [:]
+    try {
+      project?.delete(flush: true)
+      responseData["status"] = "ok"
+    } catch (Exception e) {
+      response.status = HttpServletResponse.SC_ACCEPTED
+      responseData['errors'] = message(code: "project.not.deleted.message", project?.id)
+      responseData["status"] = "error"
+    }
+    render responseData as JSON
+  }
+
   def listTestCases(Project project) {
     def responseData = [
-      'result' : project.tests,
+      'result' : project.tests.sort({ TestCase test1, test2 ->
+        test1.dateCreated.compareTo(test2.dateCreated)
+      }),
       'status' : project ? "ok" : "error"
     ]
     render responseData as JSON

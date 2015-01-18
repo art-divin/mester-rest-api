@@ -11,6 +11,7 @@ class TestCaseStepMarshaller {
       returnArray['id'] = step.id as String
       returnArray['number'] = step.number
       returnArray['text'] = step.text
+      returnArray['testCaseId'] = step.testCase.id as String
       return returnArray
     }
   }

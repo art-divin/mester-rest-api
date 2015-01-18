@@ -5,19 +5,27 @@ class UrlMappings {
     "500"(view:'/error')
     "/testcase/$id" {
       controller = "TestCase"
-      action = [GET: "show"]
+      action = [GET: "show", DELETE: "delete"]
     }
     "/testcase" {
       controller = "TestCase"
       action = [POST: "save"]
     }
-    "/project/$id" {
-      controller = "Project"
-      action = [GET: "show"]
+    "/testcase/$id/step" {
+      controller = "TestCase"
+      action = [POST: "saveStep"]
+    }
+    "/step/$id" {
+      controller = "TestCase"
+      action = [DELETE: "deleteStep"]
     }
     "/project/$id/testcases" {
       controller = 'Project'
       action = [GET: "listTestCases"]
+    }
+    "/project/$id" {
+      controller = "Project"
+      action = [GET: "show", DELETE: "delete"]
     }
     "/projects" {
       controller = 'Project'
