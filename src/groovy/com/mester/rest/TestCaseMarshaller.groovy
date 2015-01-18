@@ -9,7 +9,7 @@ class TestCaseMarshaller {
   void register() {
     JSON.registerObjectMarshaller(TestCase) { TestCase testCase ->
       def returnArray = [:]
-      returnArray['id'] = testCase.id
+      returnArray['id'] = testCase.id as String
       returnArray['title'] = testCase.title
       returnArray['creationDate'] = testCase.dateCreated.format('yyyy-MM-dd HH:mm:ss Z')
       returnArray['steps'] = testCase.steps.sort({ TestCaseStep step1, step2 -> 

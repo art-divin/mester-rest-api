@@ -8,7 +8,7 @@ class TestCaseStepMarshaller {
   void register() {
     JSON.registerObjectMarshaller(TestCaseStep) { TestCaseStep step ->
       def returnArray = [:]
-      returnArray['id'] = step.id
+      returnArray['id'] = step.id as String
       returnArray['number'] = step.number
       returnArray['text'] = step.text
       return returnArray
