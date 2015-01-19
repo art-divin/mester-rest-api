@@ -11,9 +11,13 @@ class UrlMappings {
       controller = "TestCase"
       action = [POST: "save"]
     }
-    "/testcase/$id/step" {
+    "/step" {
       controller = "TestCase"
       action = [POST: "saveStep"]
+    }
+    "/testcase/$id/steps" {
+      controller = 'TestCase'
+      action = [GET: 'showTestSteps']
     }
     "/step/$id" {
       controller = "TestCase"

@@ -24,6 +24,7 @@ class TestCaseController extends RestfulController {
   }
 
   def show(TestCase testCase) {
+    // TODO: null checking
     def responseData = [
       'result': testCase,
       'status': testCase ? "ok" : "error"
@@ -47,7 +48,7 @@ class TestCaseController extends RestfulController {
   def saveStep() {
     def objectMap = request.JSON
     def responseData = [:]
-    String testCaseId = params.id
+    String testCaseId = objectMap['testCaseId']
     if (testCaseId != null) {
       def testCase = TestCase.get(testCaseId)
       TestCaseStep step = new TestCaseStep(text: objectMap['text'], number: objectMap['number'], testCase: testCase)
@@ -65,6 +66,15 @@ class TestCaseController extends RestfulController {
       response.status = HttpServletResponse.SC_BAD_REQUEST
       responseData["status"] = "error"
     }
+    render responseData as JSON
+  }
+  
+  // TODO: null checking
+  def showTestSteps(TestCase testCase) {
+    def responseData = [
+      'result': testCase.steps,
+      'status': testCase ? "ok" : "error"
+    ]
     render responseData as JSON
   }
   
