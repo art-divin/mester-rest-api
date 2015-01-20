@@ -1,12 +1,12 @@
 package com.mester.rest
 
-import com.mester.rest.TestCaseStep;
+import com.mester.rest.TestStep;
 
 import grails.converters.JSON
 
-class TestCaseStepMarshaller {
+class TestStepMarshaller {
   void register() {
-    JSON.registerObjectMarshaller(TestCaseStep) { TestCaseStep step ->
+    JSON.registerObjectMarshaller(TestStep) { TestStep step ->
       def returnArray = [:]
       returnArray['id'] = step.id as String
       returnArray['number'] = step.number

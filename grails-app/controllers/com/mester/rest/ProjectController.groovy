@@ -10,7 +10,6 @@ import grails.converters.JSON
 
 import javax.servlet.http.*
 
-import org.apache.tools.ant.taskdefs.Javadoc;
 import org.springframework.web.HttpRequestHandler;
 
 @Transactional(readOnly = false)
@@ -36,8 +35,9 @@ class ProjectController extends RestfulController {
     try {
       project?.delete(flush: true)
       responseData["status"] = "ok"
-    } catch (Exception e) {
       response.status = HttpServletResponse.SC_ACCEPTED
+    } catch (Exception e) {
+      response.status = HttpServletResponse.SC_NOT_FOUND
       responseData['errors'] = message(code: "project.not.deleted.message", project?.id)
       responseData["status"] = "error"
     }

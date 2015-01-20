@@ -3,6 +3,8 @@ class UrlMappings {
   static mappings = {
     "/"(view:"/index")
     "500"(view:'/error')
+    
+    // TEST CASE
     "/testcase/$id" {
       controller = "TestCase"
       action = [GET: "show", DELETE: "delete"]
@@ -11,6 +13,8 @@ class UrlMappings {
       controller = "TestCase"
       action = [POST: "save"]
     }
+    
+    // STEP
     "/step" {
       controller = "TestCase"
       action = [POST: "saveStep"]
@@ -23,6 +27,8 @@ class UrlMappings {
       controller = "TestCase"
       action = [DELETE: "deleteStep"]
     }
+    
+    // PROJECT
     "/project/$id/testcases" {
       controller = 'Project'
       action = [GET: "listTestCases"]
@@ -38,6 +44,28 @@ class UrlMappings {
     "/project" {
       controller = 'Project'
       action = [POST: "save"]
+    }
+    
+    // TEST
+    "/test/$id/start" {
+      controller = 'Test'
+      action = [POST: 'startTest']
+    }
+    "/test/$id/end" {
+      controller = 'Test'
+      action = [UPDATE: 'endTest']
+    }
+    "/test/$id" {
+      controller = 'Test'
+      action = [GET: 'show']
+    }
+    "/project/$id/tests" {
+      controller = 'Test'
+      action = [GET: 'list']
+    }
+    "/project/$id/test" {
+      controller = 'Test'
+      action = [POST: 'save']
     }
   }
 }

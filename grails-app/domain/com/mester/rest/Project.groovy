@@ -1,9 +1,13 @@
 package com.mester.rest
 
+import com.mester.rest.testing.*
+
 class Project {
-  static hasMany = [tests: TestCase]
+
   String name
   Date dateCreated
+
+  static hasMany = [tests: TestCase, steppedTests: Test]
   static constraints = {
     name nullable: false, blank: false
   }

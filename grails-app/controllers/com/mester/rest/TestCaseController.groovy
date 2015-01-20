@@ -20,7 +20,6 @@ class TestCaseController extends RestfulController {
   }
 
   def index() {
-
   }
 
   def show(TestCase testCase) {
@@ -31,27 +30,28 @@ class TestCaseController extends RestfulController {
     ]
     render responseData as JSON
   }
-  
+
   def delete(TestCase testCase) {
     def responseData = [:]
     try {
       testCase?.delete(flush: true)
       responseData["status"] = "ok"
-    } catch (Exception e) {
       response.status = HttpServletResponse.SC_ACCEPTED
+    } catch (Exception e) {
+      response.status = HttpServletResponse.SC_NOT_FOUND
       responseData['errors'] = message(code: "testcase.not.deleted.message", testCase?.id)
       responseData["status"] = "error"
     }
     render responseData as JSON
   }
-  
+
   def saveStep() {
     def objectMap = request.JSON
     def responseData = [:]
     String testCaseId = objectMap['testCaseId']
     if (testCaseId != null) {
       def testCase = TestCase.get(testCaseId)
-      TestCaseStep step = new TestCaseStep(text: objectMap['text'], number: objectMap['number'], testCase: testCase)
+      TestStep step = new TestStep(text: objectMap['text'], number: objectMap['number'], testCase: testCase)
       if (step.validate()) {
         step.save()
         response.status = HttpServletResponse.SC_CREATED
@@ -68,7 +68,7 @@ class TestCaseController extends RestfulController {
     }
     render responseData as JSON
   }
-  
+
   // TODO: null checking
   def showTestSteps(TestCase testCase) {
     def responseData = [
@@ -77,17 +77,18 @@ class TestCaseController extends RestfulController {
     ]
     render responseData as JSON
   }
-  
+
   def deleteStep() {
     // TODO: better error handling for case when object was already removed
     def stepId = params.id
-    def step = TestCaseStep.get(stepId)
+    def step = TestStep.get(stepId)
     def responseData = [:]
     try {
       step?.delete(flush: true)
       responseData["status"] = "ok"
-    } catch (Exception e) {
       response.status = HttpServletResponse.SC_ACCEPTED
+    } catch (Exception e) {
+      response.status = HttpServletResponse.SC_NOT_FOUND
       responseData['errors'] = message(code: "testcase.not.deleted.message", step?.id)
       responseData["status"] = "error"
     }
