@@ -8,10 +8,18 @@ class StepTest {
   Date dateCreated
   private String status
 
-  TestStatus getStatus() {
+  void setStatus(String status) {
+    this.status = status
+  }
+
+  String getStatus() {
+    this.status
+  }
+
+  TestStatus getTestStatus() {
     status ? TestStatus.byStatus(status) : null
   }
-  void setStatus(TestStatus status) {
+  void setTestStatus(TestStatus status) {
     this.status = status.status
   }
 

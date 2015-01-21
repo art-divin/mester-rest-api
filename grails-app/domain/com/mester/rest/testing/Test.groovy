@@ -1,6 +1,9 @@
 package com.mester.rest.testing
 
 import com.mester.rest.Project;
+
+import grails.transaction.Transactional;
+
 import java.util.Date;
 
 class Test {
@@ -10,10 +13,18 @@ class Test {
   Date dateEnded
   private String status
 
-  TestStatus getStatus() {
+  void setStatus(String status) {
+    this.status = status
+  }
+
+  String getStatus() {
+    this.status
+  }
+
+  TestStatus getTestStatus() {
     status ? TestStatus.byStatus(status) : null
   }
-  void setStatus(TestStatus status) {
+  void setTestStatus(TestStatus status) {
     this.status = status.status
   }
 
@@ -26,10 +37,26 @@ class Test {
     dateStarted nullable: true, blank: true
     dateEnded nullable: true, blank: true
     project nullable: false, blank: false
-    caseTests nullable: false, blank: false
+    caseTests nullable: true, blank: true
     status nullable: false, blank: false, inList: TestStatus.values()*.status
   }
 
-  def start() {
+  @Transactional
+  def populate() {
+    this.project.tests.each { it ->
+      CaseTest test = new CaseTest(test: this, testCase: it, testStatus: TestStatus.DEFAULT)
+      if (test.validate()) {
+        test.save()
+      } else {
+        // TODO: handle errors
+        println test.errors
+      }
+    }
+  }
+  
+  def populateSteps() {
+    this.caseTests.each { it ->
+      it.populate()
+    }
   }
 }

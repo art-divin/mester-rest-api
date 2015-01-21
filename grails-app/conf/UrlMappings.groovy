@@ -49,15 +49,15 @@ class UrlMappings {
     // TEST
     "/test/$id/start" {
       controller = 'Test'
-      action = [POST: 'startTest']
+      action = [PUT: 'startTest']
     }
     "/test/$id/end" {
       controller = 'Test'
-      action = [UPDATE: 'endTest']
+      action = [PUT: 'endTest']
     }
     "/test/$id" {
       controller = 'Test'
-      action = [GET: 'show']
+      action = [GET: 'show', DELETE: "delete"]
     }
     "/project/$id/tests" {
       controller = 'Test'
