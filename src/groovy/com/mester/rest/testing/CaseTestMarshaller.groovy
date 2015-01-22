@@ -11,6 +11,7 @@ class CaseTestMarshaller {
       returnArray['creationDate'] = caseTest.dateCreated.format('yyyy-MM-dd HH:mm:ss Z')
       returnArray['stepTests'] = caseTest.stepTests
       returnArray['testId'] = caseTest.test.id as String
+      returnArray['testCaseId'] = caseTest.testCase.id as String
       return returnArray
     }
   }

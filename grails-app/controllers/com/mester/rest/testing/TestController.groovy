@@ -28,6 +28,7 @@ class TestController extends RestfulController {
         if (test.dateStarted == null) {
           test.dateStarted = new Date()
           responseData['result'] = test
+          responseData['status'] = 'ok'
         } else {
           response.status = HttpServletResponse.SC_CONFLICT
         }
@@ -114,6 +115,7 @@ class TestController extends RestfulController {
           test.save()
         }
         responseData['result'] = test
+        responseData['status'] = 'ok'
       } else {
         response.status = HttpServletResponse.SC_BAD_REQUEST
       }
@@ -130,7 +132,7 @@ class TestController extends RestfulController {
       Test test = Test.get(testId)
       if (test != null) {
         responseData['result'] = test
-        responseData['status'] = 'OK'
+        responseData['status'] = 'ok'
       } else {
         response.status = HttpServletResponse.SC_NOT_FOUND
       }
@@ -147,7 +149,7 @@ class TestController extends RestfulController {
       Project project = Project.get(projectId)
       if (project != null) {
         responseData['result'] = project.steppedTests
-        responseData['status'] = "OK"
+        responseData['status'] = "ok"
       } else {
         response.status = HttpServletResponse.SC_NOT_FOUND
       }
@@ -170,6 +172,7 @@ class TestController extends RestfulController {
           test.refresh()
           test.populateSteps()
           responseData['result'] = test
+          responseData['status'] = 'ok'
         } else {
           response.status = HttpServletResponse.SC_BAD_REQUEST
         }
