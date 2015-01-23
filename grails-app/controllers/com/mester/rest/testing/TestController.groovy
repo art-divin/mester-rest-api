@@ -41,7 +41,7 @@ class TestController extends RestfulController {
     render responseData as JSON
   }
 
-  def endTest() {
+  def saveTest() {
     def testId = params.id
     def requestData = request.JSON
     def responseData = [ 'status' : "error" ]
@@ -91,31 +91,40 @@ class TestController extends RestfulController {
             }
             stepTest.save()
           }
-          switch (caseTest.testStatus) {
-            case TestStatus.FAILED:
-              test.testStatus = TestStatus.FAILED
-              break;
-            case TestStatus.DEFAULT:
-              caseTest.testStatus = TestStatus.PASSED
-              break;
-            default:
-              break;
+          def unfinishedStepTests = caseTest.stepTests.findAll { stepTest ->
+            stepTest.testStatus == TestStatus.DEFAULT
           }
+          if (unfinishedStepTests.size() != 0) {
+            caseTest.testStatus = TestStatus.DEFAULT
+          } else {
+            if (caseTest.testStatus != TestStatus.FAILED) {
+              caseTest.testStatus = TestStatus.PASSED
+            }
+          }
+          test.refresh()
           caseTest.save()
         }
-
+        def failedCaseTests = test.caseTests.findAll { caseTest ->
+          caseTest.testStatus == TestStatus.FAILED
+        }
         def finishedCaseTests = test.caseTests.findAll { caseTest ->
           caseTest.testStatus == TestStatus.PASSED
         }
-        if (finishedCaseTests?.size() == test.caseTests.size()) {
+        if (failedCaseTests?.size() > 0) {
+          test.testStatus = TestStatus.FAILED
+        } else if (finishedCaseTests?.size() == test.caseTests.size()) {
           if (test.testStatus == TestStatus.DEFAULT) {
             test.testStatus = TestStatus.PASSED
           }
-          test.dateEnded = new Date()
-          test.save()
+          // TODO: handle if test was already marked as passed or failed
         }
+        if (test.testStatus != TestStatus.DEFAULT) {
+          test.dateEnded = new Date()
+        }
+        test.save()
         responseData['result'] = test
         responseData['status'] = 'ok'
+        // TODO: investigate 409
       } else {
         response.status = HttpServletResponse.SC_BAD_REQUEST
       }

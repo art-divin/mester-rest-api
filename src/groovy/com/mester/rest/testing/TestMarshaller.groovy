@@ -12,7 +12,9 @@ class TestMarshaller {
       returnArray['startDate'] = test.dateStarted?.format('yyyy-MM-dd HH:mm:ss Z')
       returnArray['endDate'] = test.dateEnded?.format('yyyy-MM-dd HH:mm:ss Z')
       returnArray['projectId'] = test.project.id as String
-      returnArray['caseTests'] = test.caseTests
+      returnArray['caseTests'] = test.caseTests?.sort({ CaseTest test1, test2 ->
+        test1.id == test2.id ? 0 : test1.id > test2.id ? 1 : -1
+      })
       return returnArray
     }
   }

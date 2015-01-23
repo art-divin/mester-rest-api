@@ -51,9 +51,9 @@ class UrlMappings {
       controller = 'Test'
       action = [PUT: 'startTest']
     }
-    "/test/$id/end" {
+    "/test/$id/submit" {
       controller = 'Test'
-      action = [PUT: 'endTest']
+      action = [PUT: 'saveTest']
     }
     "/test/$id" {
       controller = 'Test'
