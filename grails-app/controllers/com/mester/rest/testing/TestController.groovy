@@ -89,7 +89,7 @@ class TestController extends RestfulController {
             if (stepTest.testStatus == TestStatus.FAILED) {
               caseTest.testStatus = TestStatus.FAILED
             }
-            stepTest.save()
+            stepTest.save(flush: true)
           }
           def unfinishedStepTests = caseTest.stepTests.findAll { stepTest ->
             stepTest.testStatus == TestStatus.DEFAULT
@@ -102,7 +102,7 @@ class TestController extends RestfulController {
             }
           }
           test.refresh()
-          caseTest.save()
+          caseTest.save(flush: true)
         }
         def failedCaseTests = test.caseTests.findAll { caseTest ->
           caseTest.testStatus == TestStatus.FAILED
@@ -121,7 +121,8 @@ class TestController extends RestfulController {
         if (test.testStatus != TestStatus.DEFAULT) {
           test.dateEnded = new Date()
         }
-        test.save()
+        test.save(flush: true)
+        test.refresh()
         responseData['result'] = test
         responseData['status'] = 'ok'
         // TODO: investigate 409

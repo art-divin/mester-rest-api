@@ -72,7 +72,9 @@ class TestCaseController extends RestfulController {
   // TODO: null checking
   def showTestSteps(TestCase testCase) {
     def responseData = [
-      'result': testCase.steps,
+      'result': testCase.steps.sort({ TestStep step1, step2 -> 
+        step1.number == step2.number ? 0 : step1.number > step2.number ? 1 : -1 
+      }),
       'status': testCase ? "ok" : "error"
     ]
     render responseData as JSON
