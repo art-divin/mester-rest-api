@@ -49,41 +49,46 @@ class TestController extends RestfulController {
       Test test = Test.get(testId)
       if (test != null) {
         if (test.dateEnded != null || test.status == TestStatus.PASSED) {
-          response.sendError(HttpServletResponse.SC_CONFLICT)
+          response.status = HttpServletResponse.SC_CONFLICT
+          render responseData as JSON
+          return
         }
         if (test.dateStarted == null) {
-          response.sendError(HttpServletResponse.SC_BAD_REQUEST)
+          response.status = HttpServletResponse.SC_BAD_REQUEST
+          render responseData as JSON
+          return
         }
         def caseTests = requestData['caseTests']
         if (caseTests == null) {
-          // TODO: return on bad requests
-          response.sendError(HttpServletResponse.SC_BAD_REQUEST)
+          response.status = HttpServletResponse.SC_BAD_REQUEST
+          render responseData as JSON
+          return
         }
         caseTests.each { caseTestMap ->
           def caseTestId = caseTestMap['id']
           CaseTest caseTest = CaseTest.get(caseTestId)
           if (caseTest == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST)
+            response.status = HttpServletResponse.SC_BAD_REQUEST
           }
           if (caseTestId == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST)
+            response.status = HttpServletResponse.SC_BAD_REQUEST
           }
           def stepTests = caseTestMap['stepTests']
           if (stepTests == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST)
+            response.status = HttpServletResponse.SC_BAD_REQUEST
           }
           stepTests.each { map ->
             def stepTestId = map['id']
             def stepTestStatus = map['status']
             if (stepTestId == null || stepTestStatus == null) {
-              response.sendError(HttpServletResponse.SC_BAD_REQUEST)
+              response.status = HttpServletResponse.SC_BAD_REQUEST
             }
             StepTest stepTest = StepTest.get(stepTestId)
             if (stepTest == null) {
-              response.sendError(HttpServletResponse.SC_NOT_FOUND)
+              response.status = HttpServletResponse.SC_NOT_FOUND
             }
             if (!caseTest.stepTests.find { it == stepTest }) {
-              response.sendError(HttpServletResponse.SC_BAD_REQUEST)
+              response.status = HttpServletResponse.SC_BAD_REQUEST
             }
             stepTest.testStatus = TestStatus.byStatus(stepTestStatus)
             if (stepTest.testStatus == TestStatus.FAILED) {
@@ -101,8 +106,12 @@ class TestController extends RestfulController {
               caseTest.testStatus = TestStatus.PASSED
             }
           }
-          test.refresh()
           caseTest.save(flush: true)
+        }
+        test.refresh()
+        if (response.status != HttpServletResponse.SC_OK) {
+          render responseData as JSON
+          return
         }
         def failedCaseTests = test.caseTests.findAll { caseTest ->
           caseTest.testStatus == TestStatus.FAILED
@@ -110,22 +119,20 @@ class TestController extends RestfulController {
         def finishedCaseTests = test.caseTests.findAll { caseTest ->
           caseTest.testStatus == TestStatus.PASSED
         }
+        
         if (failedCaseTests?.size() > 0) {
-          test.testStatus = TestStatus.FAILED
-        } else if (finishedCaseTests?.size() == test.caseTests.size()) {
-          if (test.testStatus == TestStatus.DEFAULT) {
-            test.testStatus = TestStatus.PASSED
+          if (failedCaseTests?.size() + finishedCaseTests?.size() == test.caseTests.size()) {
+            test.testStatus = TestStatus.FAILED
+            test.dateEnded = new Date()
           }
-          // TODO: handle if test was already marked as passed or failed
-        }
-        if (test.testStatus != TestStatus.DEFAULT) {
+        } else if (finishedCaseTests?.size() == test.caseTests.size()) {
+          test.testStatus = TestStatus.PASSED
           test.dateEnded = new Date()
         }
         test.save(flush: true)
         test.refresh()
         responseData['result'] = test
         responseData['status'] = 'ok'
-        // TODO: investigate 409
       } else {
         response.status = HttpServletResponse.SC_BAD_REQUEST
       }
