@@ -21,14 +21,27 @@ In order to build & run project, you'll need:
 * Eclipse (the fastest IDE to compile Grails, preferably basic distribution like Luna)
 * Eclipse GGTS **plugin**
 * MySQL DB (community edition is fine)*[1]
-* Java JDK (I am using JDK 1.8u25 at the moment)
+* JDK (I am using JDK 1.8u25 at the moment, but 1.7 would work as well)
 * Grails 2.4.4 or later*[2]
 * Groovy 2.3.9 or later*[2]
 
 [*1] : 
 
-1. You need to create a user "admin" with password "password" (this can be changed in DataSource configuration)
-2. You need to create a DB called "mester"
+* You need to create a user with a password (this can be changed in DataSource configuration)
+* You need to create a DB and specify its name
+* You need to create a configuration file and put it on your local drive outside of the project with following content as a template:
+```groovy
+environments {
+	development {
+		dataSource {
+			url="jdbc:mysql://localhost:3306/PLACE_DB_NAME_HERE"
+			username="PLACE_CREATED_USERNAME_HERE"
+			password="PLACE_USER_PASSWORD_HERE"
+		}
+	}
+}
+```
+* You need to replace line [#62](https://github.com/art-divin/mester-rest-api/blob/develop/grails-app/conf/Config.groovy#L62) in file [Config.groovy](/grails-app/conf/Config.groovy) with to your configuration file's location
 
 [*2] : it is possible that later versions of language / platform will have some methods used in the project deprecated. For easiest setup, use specified versions
 
