@@ -59,7 +59,7 @@ grails {
     }
 }
 
-
+grails.config.locations = [ "file:${userHome}/conf/${appName}-config.groovy"]
 grails.converters.default.pretty.print = true
 grails.converters.encoding = "UTF-8"
 // scaffolding templates configuration
@@ -92,7 +92,6 @@ environments {
     }
     production {
         grails.logging.jul.usebridge = false
-        // TODO: grails.serverURL = "http://www.changeme.com"
     }
 }
 
