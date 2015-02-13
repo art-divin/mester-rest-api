@@ -67,5 +67,9 @@ class UrlMappings {
       controller = 'Test'
       action = [POST: 'save']
     }
+    "/test/casetest/$id" {
+      controller = 'Test'
+      action = [GET: 'caseTestById']
+    }
   }
 }

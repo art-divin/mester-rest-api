@@ -215,4 +215,21 @@ class TestController extends RestfulController {
     response.status = HttpServletResponse.SC_OK
     render [:] as JSON
   }
+  
+  def caseTestById() {
+    def caseTestId = params.id
+    def responseData = [ 'status' : "error" ]
+    if (caseTestId != null) {
+      CaseTest caseTest = CaseTest.get(caseTestId)
+      if (caseTest != null) {
+        responseData['result'] = caseTest
+        responseData['status'] = 'ok'
+      } else {
+        response.status = HttpServletResponse.SC_NOT_FOUND
+      }
+    } else {
+      response.status = HttpServletResponse.SC_NOT_ACCEPTABLE
+    }
+    render responseData as JSON
+  }
 }
