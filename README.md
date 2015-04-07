@@ -52,7 +52,7 @@ environments {
 ### Whom do I talk to? ###
 
 * Check out Wiki pages for more info about the project:
- * [JSON Structure](wiki/JSON-Structure) page describes JSON structure for all object entities
+ * [JSON Structure](https://github.com/art-divin/mester-rest-api/wiki/JSON-Structure) page describes JSON structure for all object entities
 * If you have any further questions, open an issue and I'll answer as soon as possible
 
 ### License ###
