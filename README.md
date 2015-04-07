@@ -49,9 +49,11 @@ environments {
 
 * Currently, project is in read-only mode
 
-### Who do I talk to? ###
+### Whom do I talk to? ###
 
-* If you have any questions, send a Pull Request and I'll answer as soon as possible
+* Check out Wiki pages for more info about the project:
+ * [JSON Structure](wiki/JSON-Structure) page describes JSON structure for all object entities
+* If you have any further questions, open an issue and I'll answer as soon as possible
 
 ### License ###
 
