@@ -19,28 +19,6 @@ class TestController extends RestfulController {
 
   def index() { }
 
-  def startTest() {
-    def testId = params.id
-    def responseData = [ 'status' : "error" ]
-    if (testId != null) {
-      Test test = Test.get(testId)
-      if (test != null) {
-        if (test.dateStarted == null) {
-          test.dateStarted = new Date()
-          responseData['result'] = test
-          responseData['status'] = 'ok'
-        } else {
-          response.status = HttpServletResponse.SC_CONFLICT
-        }
-      } else {
-        response.status = HttpServletResponse.SC_NOT_FOUND
-      }
-    } else {
-      response.status = HttpServletResponse.SC_NOT_ACCEPTABLE
-    }
-    render responseData as JSON
-  }
-
   def saveTest() {
     def testId = params.id
     def requestData = request.JSON
@@ -54,9 +32,7 @@ class TestController extends RestfulController {
           return
         }
         if (test.dateStarted == null) {
-          response.status = HttpServletResponse.SC_BAD_REQUEST
-          render responseData as JSON
-          return
+          test.dateStarted = new Date()
         }
         def caseTests = requestData['caseTests']
         if (caseTests == null) {

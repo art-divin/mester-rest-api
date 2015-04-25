@@ -47,10 +47,6 @@ class UrlMappings {
     }
     
     // TEST
-    "/test/$id/start" {
-      controller = 'Test'
-      action = [PUT: 'startTest']
-    }
     "/test/$id/submit" {
       controller = 'Test'
       action = [PUT: 'saveTest']
