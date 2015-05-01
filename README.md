@@ -1,5 +1,7 @@
 # mester-rest-api #
 
+[![Join the chat at https://gitter.im/art-divin/mester-rest-api](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/art-divin/mester-rest-api?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Mester is a suite for Quality Assurance testing (QA).
 Mester consists of 3 parts:
 
